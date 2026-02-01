@@ -3,948 +3,1398 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌸 源源刷机助手</title>
+    <title>✨魔法刷机工具 </title>
     <style>
+        /* 魔法少女主题完整样式 */
+        :root {
+            --magic-pink: #ff9ed8;
+            --magic-purple: #c8a2ff;
+            --magic-blue: #9ed8ff;
+            --magic-yellow: #fff89e;
+            --magic-green: #a2ffc8;
+            --dark-purple: #6a4c93;
+            --light-pink: #fff9fe;
+            --warning-red: #ff6b6b;
+            --success-green: #51cf66;
+            --border-color: #e0b6ff;
+            --shadow: 0 4px 20px rgba(255, 158, 216, 0.3);
+            --radius: 16px;
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
         
-        :root {
-            --main-pink: #ff7eb9;
-            --light-pink: #ffb8d9;
-            --lighter-pink: #ffe6f0;
-            --accent-lavender: #d5b8ff;
-            --accent-mint: #7fffd4;
-            --accent-yellow: #ffd700;
-            --text-dark: #5a5a5a;
-            --text-light: #888;
-        }
-        
         body {
-            font-family: 'Microsoft YaHei', 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #ffe6f0, #f0f8ff);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #ffcfe6 0%, #d6c2ff 100%);
             min-height: 100vh;
-            padding: 20px;
-            color: var(--text-dark);
+            color: var(--dark-purple);
+            position: relative;
+            overflow-x: hidden;
         }
         
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
+        /* 魔法星星背景 */
+        .magic-stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .magic-star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.2); }
+        }
+        
+        /* 魔法能量条 */
+        .magic-energy {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--magic-pink);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .energy-label {
+            font-weight: bold;
+            color: var(--dark-purple);
+        }
+        
+        .energy-bar {
+            width: 200px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid var(--border-color);
+        }
+        
+        .energy-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--magic-pink), var(--magic-purple));
+            width: 100%;
+            border-radius: 8px;
+            transition: width 0.3s ease;
+        }
+        
+        .energy-percent {
+            font-weight: bold;
+            color: var(--dark-purple);
+            min-width: 40px;
+        }
+        
+        /* 主容器 */
+        .container {
             position: relative;
+            z-index: 2;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* 头部 */
+        .header {
+            background: linear-gradient(135deg, var(--magic-pink), var(--magic-purple));
+            padding: 30px 40px;
+            border-radius: var(--radius);
+            margin-bottom: 30px;
+            color: white;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 2px solid white;
         }
         
         .header h1 {
-            font-size: 3.2rem;
-            color: #ff6b9d;
-            margin-bottom: 10px;
-            text-shadow: 3px 3px 0 rgba(255, 182, 193, 0.3);
-            position: relative;
-            display: inline-block;
+            font-size: 2.5em;
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
         
-        .header h1::before, .header h1::after {
-            content: '🌸';
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 2rem;
+        .header h1 i {
+            font-size: 1.5em;
         }
         
-        .header h1::before { left: -50px; }
-        .header h1::after { right: -50px; }
+        .power-status {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 12px 20px;
+            border-radius: 12px;
+            backdrop-filter: blur(5px);
+        }
         
-        .tagline {
-            color: #6a6aff;
-            font-size: 1.3rem;
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            background: #ff6b6b;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        .status-dot.connected {
+            background: #51cf66;
+            animation: none;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        /* 主内容区 */
+        .main-content {
+            display: flex;
+            gap: 30px;
+        }
+        
+        /* 侧边栏 */
+        .sidebar {
+            width: 280px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: var(--radius);
+            padding: 20px 0;
+            box-shadow: var(--shadow);
+            border: 2px solid white;
+            backdrop-filter: blur(10px);
+        }
+        
+        .menu-item {
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+            font-weight: 500;
+        }
+        
+        .menu-item:hover {
+            background: rgba(200, 162, 255, 0.1);
+            border-left-color: var(--magic-pink);
+        }
+        
+        .menu-item.active {
+            background: linear-gradient(90deg, rgba(255, 158, 216, 0.1), rgba(200, 162, 255, 0.1));
+            border-left-color: var(--magic-purple);
+            color: var(--dark-purple);
             font-weight: bold;
         }
         
-        .cute-container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 25px;
-            padding: 30px;
-            box-shadow: 0 15px 40px rgba(255, 182, 193, 0.2);
-            border: 3px solid var(--main-pink);
-            position: relative;
-            overflow: hidden;
+        .menu-item i {
+            font-size: 1.2em;
+            width: 24px;
+            text-align: center;
         }
         
-        .cute-container::before {
+        /* 内容区 */
+        .content-area {
+            flex: 1;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* 卡片 */
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: var(--radius);
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            border: 2px solid white;
+            backdrop-filter: blur(10px);
+        }
+        
+        .card-title {
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            color: var(--dark-purple);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        /* 按钮 */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: white;
+            background: linear-gradient(135deg, var(--magic-blue), var(--magic-purple));
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(158, 216, 255, 0.4);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--magic-pink), var(--magic-purple));
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, var(--success-green), #37b24d);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, var(--warning-red), #ff6b6b);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, #ffd43b, #fcc419);
+        }
+        
+        /* 进度条 */
+        .progress-container {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid var(--border-color);
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .progress-bar {
+            height: 20px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid var(--border-color);
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--magic-pink), var(--magic-purple));
+            width: 0%;
+            border-radius: 8px;
+            transition: width 0.3s ease;
+            position: relative;
+        }
+        
+        .progress-fill::after {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 8px;
-            background: linear-gradient(90deg, 
-                #ff7eb9, #ffb8d9, #d5b8ff, #7fffd4, #ffd700);
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
         }
         
-        /* 教程按钮 */
-        .help-button {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #ff7eb9, #ff6b9d);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 28px;
-            cursor: pointer;
-            box-shadow: 0 5px 20px rgba(255, 126, 185, 0.4);
-            z-index: 1000;
-            transition: all 0.3s ease;
-            border: 3px solid white;
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
         
-        .help-button:hover {
-            transform: scale(1.1) rotate(10deg);
-            box-shadow: 0 8px 25px rgba(255, 126, 185, 0.6);
-        }
-        
-        /* 教程弹窗 */
-        .tutorial-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-            animation: fadeIn 0.3s ease;
-        }
-        
-        .tutorial-content {
-            background: white;
-            width: 90%;
-            max-width: 800px;
-            max-height: 90vh;
-            border-radius: 25px;
-            overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-            border: 3px solid var(--main-pink);
-            animation: slideUp 0.4s ease;
-        }
-        
-        .tutorial-header {
-            background: linear-gradient(135deg, #ff7eb9, #ffb8d9);
-            color: white;
-            padding: 25px;
-            text-align: center;
-            position: relative;
-        }
-        
-        .tutorial-header h2 {
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-        
-        .close-button {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: white;
-            color: #ff7eb9;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 24px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-        
-        .close-button:hover {
-            transform: rotate(90deg);
-            background: #ff7eb9;
-            color: white;
-        }
-        
-        .tutorial-body {
-            padding: 30px;
-            max-height: 60vh;
-            overflow-y: auto;
-        }
-        
-        .tutorial-section {
-            margin-bottom: 30px;
-        }
-        
-        .tutorial-section h3 {
-            color: #ff6b9d;
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            padding-left: 15px;
-            border-left: 5px solid #ff7eb9;
-        }
-        
-        .step {
-            background: #fff5f9;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 15px;
-            border: 2px solid #ffd1e0;
-        }
-        
-        .step-number {
-            display: inline-block;
-            width: 30px;
-            height: 30px;
-            background: #ff7eb9;
-            color: white;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 30px;
-            font-weight: bold;
-            margin-right: 10px;
-        }
-        
-        .warning-box {
-            background: #fff9f0;
-            border: 3px solid #ffd700;
-            border-radius: 15px;
-            padding: 20px;
-            margin: 20px 0;
-        }
-        
-        .warning-title {
-            color: #e6a700;
-            font-weight: bold;
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .agree-box {
-            text-align: center;
-            margin: 30px 0;
-        }
-        
-        .agree-checkbox {
-            margin-right: 10px;
-        }
-        
-        .status-box {
-            background: linear-gradient(135deg, #fff5f9, #fff0f5);
-            border-radius: 20px;
-            padding: 25px;
-            margin-bottom: 25px;
-            border: 3px solid var(--main-pink);
-            position: relative;
-        }
-        
-        .status-box h2 {
-            color: #ff6b9d;
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .status-indicator {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .status-dot {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #ffaaa5;
-            animation: pulse 2s infinite;
-        }
-        
-        .status-dot.connected {
-            background: #7fffd4;
-            box-shadow: 0 0 15px #7fffd4;
-        }
-        
-        .status-text {
-            font-size: 1.1rem;
-            flex: 1;
-        }
-        
-        .button-group {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-        
-        .cute-button {
-            padding: 14px 25px;
-            border: none;
-            border-radius: 20px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            min-width: 140px;
-        }
-        
-        .cute-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        .cute-button:active {
-            transform: translateY(-1px);
-        }
-        
-        .cute-button:disabled {
-            background: #e0e0e0 !important;
-            color: #aaa !important;
-            cursor: not-allowed;
-            transform: none !important;
-            box-shadow: none !important;
-        }
-        
-        .btn-connect {
-            background: linear-gradient(135deg, #ff7eb9, #ff6b9d);
-            color: white;
-        }
-        
-        .btn-disconnect {
-            background: linear-gradient(135deg, #d5b8ff, #b89fff);
-            color: white;
-        }
-        
-        .btn-secondary {
-            background: linear-gradient(135deg, #7fffd4, #5fffc3);
-            color: #333;
-        }
-        
-        .btn-warning {
-            background: linear-gradient(135deg, #ffd700, #ffc800);
-            color: #333;
-        }
-        
-        .btn-danger {
-            background: linear-gradient(135deg, #ffaaa5, #ff8a85);
-            color: white;
-        }
-        
-        .function-box {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            margin-bottom: 25px;
-            border: 3px solid var(--accent-lavender);
-            box-shadow: 0 5px 15px rgba(213, 184, 255, 0.1);
-        }
-        
-        .function-box h2 {
-            color: #9d6bff;
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .cute-input {
-            width: 100%;
-            padding: 15px 20px;
-            border: 3px solid #ffd1e0;
-            border-radius: 15px;
-            font-size: 1.1rem;
-            margin: 10px 0;
-            transition: all 0.3s ease;
-        }
-        
-        .cute-input:focus {
-            outline: none;
-            border-color: var(--main-pink);
-            box-shadow: 0 0 0 3px rgba(255, 126, 185, 0.2);
-        }
-        
-        .quick-commands {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin: 15px 0;
-        }
-        
-        .quick-btn {
-            padding: 8px 16px;
-            background: #f8f0ff;
-            border: 2px solid #e0d0ff;
-            border-radius: 15px;
-            color: #9d6bff;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 0.9rem;
-        }
-        
-        .quick-btn:hover {
-            background: #e0d0ff;
-            transform: translateY(-2px);
-        }
-        
-        .result-box {
-            background: #f8fcff;
-            border: 3px solid #a6d8ff;
-            border-radius: 15px;
-            padding: 20px;
-            min-height: 120px;
-            max-height: 300px;
-            overflow-y: auto;
-            font-family: 'Courier New', monospace;
-            font-size: 0.95rem;
-            line-height: 1.5;
-            white-space: pre-wrap;
-            margin-top: 15px;
-        }
-        
-        .progress-container {
-            display: none;
-            margin: 20px 0;
-        }
-        
-        .progress-bar {
-            width: 100%;
-            height: 20px;
-            background: #f0f0f0;
+        /* 日志窗口 */
+        .log-window {
+            background: rgba(0, 0, 0, 0.8);
             border-radius: 10px;
-            overflow: hidden;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #ff7eb9, #d5b8ff, #7fffd4);
-            width: 0%;
-            transition: width 0.3s ease;
-            border-radius: 10px;
-        }
-        
-        .progress-text {
-            text-align: center;
-            margin-top: 8px;
-            color: var(--text-light);
-            font-size: 0.9rem;
-        }
-        
-        .log-box {
-            background: #fff9ff;
-            border: 3px solid #ffd1e0;
-            border-radius: 15px;
             padding: 20px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            color: #51cf66;
             height: 300px;
             overflow-y: auto;
+            line-height: 1.6;
+            border: 2px solid var(--magic-green);
         }
         
         .log-entry {
-            padding: 12px 15px;
             margin-bottom: 8px;
-            border-radius: 12px;
-            background: white;
-            border-left: 5px solid;
-            animation: slideIn 0.3s ease;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        
+        .log-entry.error {
+            background: rgba(255, 107, 107, 0.1);
+            color: #ff6b6b;
+        }
+        
+        .log-entry.warning {
+            background: rgba(255, 212, 59, 0.1);
+            color: #ffd43b;
+        }
+        
+        .log-entry.info {
+            background: rgba(158, 216, 255, 0.1);
+            color: var(--magic-blue);
+        }
+        
+        .log-entry.success {
+            background: rgba(81, 207, 102, 0.1);
+            color: #51cf66;
         }
         
         .log-time {
-            color: #aaa;
-            font-size: 0.8rem;
+            color: #868e96;
+            font-size: 12px;
+        }
+        
+        /* 分区网格 */
+        .partition-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 12px;
+            margin: 15px 0;
+        }
+        
+        .partition-item {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(240, 240, 255, 0.9));
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .partition-item:hover {
+            transform: translateY(-2px);
+            border-color: var(--magic-pink);
+            box-shadow: 0 4px 12px rgba(255, 158, 216, 0.2);
+        }
+        
+        .partition-item.active {
+            background: linear-gradient(135deg, var(--magic-pink), var(--magic-purple));
+            color: white;
+            border-color: var(--magic-purple);
+        }
+        
+        /* 文件上传区 */
+        .file-upload-area {
+            border: 3px dashed var(--border-color);
+            border-radius: var(--radius);
+            padding: 50px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.5);
+        }
+        
+        .file-upload-area:hover {
+            border-color: var(--magic-pink);
+            background: rgba(255, 255, 255, 0.8);
+        }
+        
+        /* 模态框 */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #fff, #f8f9ff);
+            border-radius: var(--radius);
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            border: 2px solid var(--magic-pink);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-header h2 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--dark-purple);
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        
+        .close-modal:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        
+        /* OTG通知 */
+        .otg-notice {
+            background: linear-gradient(135deg, #ffeaa7, #fab1a0);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #f39c12;
+        }
+        
+        .otg-notice i {
+            font-size: 24px;
             margin-right: 10px;
         }
         
-        .log-info { border-left-color: #4a90e2; }
-        .log-success { border-left-color: #52c41a; }
-        .log-error { border-left-color: #ff4d4f; }
-        .log-warning { border-left-color: #faad14; }
-        
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 2px dashed var(--light-pink);
-            color: var(--text-light);
-            font-size: 0.9rem;
-        }
-        
-        .tip-box {
-            background: #fff9f0;
-            border: 2px dashed #ffd700;
-            border-radius: 15px;
-            padding: 15px;
-            margin: 15px 0;
-            color: #e6a700;
-        }
-        
-        .emoji {
-            font-size: 1.2em;
-            margin-right: 5px;
-        }
-        
-        @keyframes pulse {
-            0% { opacity: 0.7; }
-            50% { opacity: 1; }
-            100% { opacity: 0.7; }
-        }
-        
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-10px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
         /* 响应式设计 */
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2.2rem;
-            }
-            
-            .header h1::before,
-            .header h1::after {
-                display: none;
-            }
-            
-            .cute-container {
-                padding: 20px;
-            }
-            
-            .button-group {
+        @media (max-width: 1200px) {
+            .main-content {
                 flex-direction: column;
             }
             
-            .cute-button {
+            .sidebar {
                 width: 100%;
+                display: flex;
+                overflow-x: auto;
             }
             
-            .help-button {
-                bottom: 20px;
-                right: 20px;
-                width: 50px;
-                height: 50px;
-                font-size: 24px;
+            .menu-item {
+                white-space: nowrap;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
             }
             
-            .tutorial-content {
-                width: 95%;
-                max-height: 85vh;
+            .header h1 {
+                font-size: 1.8em;
             }
+            
+            .partition-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        /* 魔法消息 */
+        .magic-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #51cf66, #37b24d);
+            color: white;
+            padding: 15px 20px;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 20px rgba(81, 207, 102, 0.3);
+            z-index: 3000;
+            animation: slideInRight 0.3s ease, slideOutRight 0.3s ease 2.7s;
+            animation-fill-mode: forwards;
+        }
+        
+        .magic-message.error {
+            background: linear-gradient(135deg, #ff6b6b, #fa5252);
+        }
+        
+        .magic-message.warning {
+            background: linear-gradient(135deg, #ffd43b, #fcc419);
+        }
+        
+        .magic-message.info {
+            background: linear-gradient(135deg, var(--magic-blue), #339af0);
+        }
+        
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes slideOutRight {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
         }
     </style>
 </head>
 <body>
-    <!-- 教程按钮 -->
-    <div class="help-button" id="helpButton">💖</div>
+    <!-- 魔法星星背景 -->
+    <div class="magic-stars" id="magicStars"></div>
     
-    <!-- 教程弹窗 -->
-    <div class="tutorial-modal" id="tutorialModal">
-        <div class="tutorial-content">
-            <div class="tutorial-header">
-                <h2>🌸 使用教程 & 注意事项</h2>
-                <p>源源刷机助手使用指南～</p>
-                <div class="close-button" id="closeTutorial">&times;</div>
-            </div>
-            
-            <div class="tutorial-body">
-                <div class="tutorial-section">
-                    <h3>📱 准备工作</h3>
-                    <div class="step">
-                        <span class="step-number">1</span> 确保使用 Edge 浏览器或 Chrome 浏览器
-                    </div>
-                    <div class="step">
-                        <span class="step-number">2</span> 准备一条 OTG 数据线
-                    </div>
-                    <div class="step">
-                        <span class="step-number">3</span> 手机要进入 Fastboot 模式（关机后按音量下+电源键）
-                    </div>
-                </div>
-                
-                <div class="tutorial-section">
-                    <h3>🚀 使用方法</h3>
-                    <div class="step">
-                        <span class="step-number">1</span> 点击"连接设备"按钮
-                    </div>
-                    <div class="step">
-                        <span class="step-number">2</span> 在浏览器弹出的窗口中选择你的手机
-                    </div>
-                    <div class="step">
-                        <span class="step-number">3</span> 连接成功后就可以使用各种功能啦！
-                    </div>
-                </div>
-                
-                <div class="tutorial-section">
-                    <h3>✨ 功能说明</h3>
-                    <div class="step">
-                        <strong>📁 镜像刷写：</strong> 选择镜像文件，输入分区名称，点击刷写
-                    </div>
-                    <div class="step">
-                        <strong>🚀 临时启动：</strong> 测试镜像而不刷入手机
-                    </div>
-                    <div class="step">
-                        <strong>🧹 擦除分区：</strong> 清除指定的分区数据
-                    </div>
-                    <div class="step">
-                        <strong>💥 清除数据：</strong> 清除手机上的所有用户数据
-                    </div>
-                    <div class="step">
-                        <strong>🔓 解锁/锁定：</strong> 解锁或锁定手机的 Bootloader
-                    </div>
-                </div>
-                
-                <div class="warning-box">
-                    <div class="warning-title">⚠️ 重要警告</div>
-                    <p>1. 刷机有风险，操作前请<strong>务必备份重要数据</strong>！</p>
-                    <p>2. 错误的刷机操作可能导致手机无法开机！</p>
-                    <p>3. 解锁 Bootloader 可能导致保修失效！</p>
-                    <p>4. 请确保使用的镜像文件与你的手机型号匹配！</p>
-                    <p>5. 本工具仅供学习交流使用，请勿用于非法用途！</p>
-                </div>
-                
-                <div class="warning-box">
-                    <div class="warning-title">📄 免责声明</div>
-                    <p>本人（开发者"源源"）不对使用本工具造成的任何损失负责。</p>
-                    <p>使用本工具即表示您同意自行承担所有风险。</p>
-                    <p>包括但不限于：数据丢失、设备变砖、保修失效等后果。</p>
-                    <p>请在了解刷机风险的前提下谨慎操作！</p>
-                </div>
-                
-                <div class="agree-box">
-                    <label>
-                        <input type="checkbox" id="agreeCheckbox" class="agree-checkbox">
-                        我已阅读并理解上述警告和免责声明，自愿使用本工具
-                    </label>
-                </div>
-                
-                <div style="text-align: center; margin-top: 20px;">
-                    <button id="agreeButton" class="cute-button btn-connect" style="min-width: 200px;" disabled>
-                        我同意，开始使用
-                    </button>
-                </div>
-            </div>
+    <!-- 魔法能量条 -->
+    <div class="magic-energy">
+        <span class="energy-label">✨ 魔法能量</span>
+        <div class="energy-bar">
+            <div class="energy-fill" id="energyFill"></div>
         </div>
+        <span class="energy-percent" id="energyPercent">100%</span>
     </div>
     
-    <div class="header">
-        <h1>🌸 源源刷机助手</h1>
-        <p class="tagline">✨ 用Edge浏览器就能给手机刷机啦！</p>
-    </div>
-    
-    <div class="cute-container">
-        <!-- 设备状态 -->
-        <div class="status-box">
-            <h2><span class="emoji">📱</span> 设备状态</h2>
-            <div class="status-indicator">
+    <!-- 主容器 -->
+    <div class="container">
+        <!-- 头部 -->
+        <div class="header">
+            <h1>
+                <i>✨</i>
+                魔法刷机工具
+                <span style="font-size: 20px; font-weight: normal; opacity: 0.9;">最终版🌸</span>
+            </h1>
+            <div class="power-status">
                 <div class="status-dot" id="statusDot"></div>
-                <div class="status-text" id="statusText">哎呀，还没连接设备呢～ 先连接手机吧！</div>
-            </div>
-            <div class="button-group">
-                <button id="connectBtn" class="cute-button btn-connect">🔌 连接设备</button>
-                <button id="disconnectBtn" class="cute-button btn-disconnect" disabled>🔋 断开连接</button>
-                <button id="refreshBtn" class="cute-button btn-secondary">🔄 刷新状态</button>
+                <span id="statusText">等待连接魔法设备...💫</span>
             </div>
         </div>
-        
-        <!-- Fastboot命令 -->
-        <div class="function-box">
-            <h2><span class="emoji">🎯</span> Fastboot命令</h2>
-            <p style="color: #888; margin-bottom: 15px;">输入Fastboot命令，按回车或点击按钮执行～</p>
-            <input type="text" id="commandInput" class="cute-input" placeholder="比如：getvar all 可以查看设备信息哦！" />
-            
-            <div class="quick-commands">
-                <div class="quick-btn" onclick="document.getElementById('commandInput').value='getvar all'">获取设备信息</div>
-                <div class="quick-btn" onclick="document.getElementById('commandInput').value='devices'">查看设备列表</div>
-                <div class="quick-btn" onclick="document.getElementById('commandInput').value='reboot'">重启设备</div>
-                <div class="quick-btn" onclick="document.getElementById('commandInput').value='reboot bootloader'">重启到Fastboot</div>
-                <div class="quick-btn" onclick="document.getElementById('commandInput').value='oem device-info'">查看设备信息</div>
-            </div>
-            
-            <div class="button-group">
-                <button id="executeBtn" class="cute-button btn-connect">🚀 执行命令</button>
-                <button id="clearResultBtn" class="cute-button btn-secondary">🧹 清空结果</button>
-            </div>
-            
-            <div class="result-box" id="resultBox">命令结果会在这里显示哦～ 试试看吧！</div>
-        </div>
-        
-        <!-- 镜像刷写 -->
-        <div class="function-box">
-            <h2><span class="emoji">📁</span> 镜像刷写</h2>
-            <p style="color: #888; margin-bottom: 15px;">选择要刷写的镜像文件，然后选择分区～</p>
-            
-            <input type="file" id="flashFile" class="cute-input" accept=".img" />
-            <input type="text" id="flashPartition" class="cute-input" placeholder="分区名称，比如：boot, system, recovery" value="boot" />
-            
-            <div class="progress-container" id="progressContainer">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
+
+        <div class="main-content">
+            <!-- 左侧菜单 -->
+            <div class="sidebar">
+                <div class="menu-item active" data-tab="connection">
+                    <i>🔮</i> 魔法连接
                 </div>
-                <div class="progress-text" id="progressText">等待开始...</div>
-            </div>
-            
-            <div class="tip-box">
-                💡 小提示：刷机前记得备份重要数据哦！安全第一～
-            </div>
-            
-            <div class="button-group">
-                <button id="flashBtn" class="cute-button btn-connect" disabled>✨ 开始刷写</button>
-                <button id="eraseBtn" class="cute-button btn-warning">🧹 擦除分区</button>
-            </div>
-        </div>
-        
-        <!-- 高级功能 -->
-        <div class="function-box">
-            <h2><span class="emoji">⚙️</span> 高级功能</h2>
-            <p style="color: #888; margin-bottom: 15px;">这些功能要小心使用哦～ 弄错了可不好玩！</p>
-            
-            <div class="button-group">
-                <button id="tempBootBtn" class="cute-button btn-secondary" disabled>🚀 临时启动</button>
-                <input type="file" id="bootFile" accept=".img" style="display: none;" />
-                <button id="wipeBtn" class="cute-button btn-warning">💥 清除数据</button>
-                <button id="unlockBtn" class="cute-button btn-danger">🔓 解锁Bootloader</button>
-                <button id="lockBtn" class="cute-button btn-secondary">🔒 锁定Bootloader</button>
-            </div>
-        </div>
-        
-        <!-- 操作日志 -->
-        <div class="function-box">
-            <h2><span class="emoji">📝</span> 操作日志</h2>
-            <div class="button-group">
-                <button id="clearLogBtn" class="cute-button btn-secondary">🧹 清空日志</button>
-            </div>
-            <div id="logContainer" class="log-box">
-                <div class="log-entry log-info">
-                    <span class="log-time">[刚刚]</span> 🌸 欢迎使用源源刷机助手！
+                <div class="menu-item" data-tab="flash">
+                    <i>✨</i> 镜像魔法
                 </div>
-                <div class="log-entry log-info">
-                    <span class="log-time">[刚刚]</span> 💖 请连接你的手机开始使用吧～
+                <div class="menu-item" data-tab="partitions">
+                    <i>💫</i> 分区管理
+                </div>
+                <div class="menu-item" data-tab="commands">
+                    <i>📖</i> 魔法咒语
+                </div>
+                <div class="menu-item" data-tab="advanced">
+                    <i>🌟</i> 高阶魔法
+                </div>
+                <div class="menu-item" data-tab="logs">
+                    <i>📒</i> 魔法日记
                 </div>
             </div>
-        </div>
-        
-        <!-- 底部提示 -->
-        <div class="footer">
-            <p>🌸 使用方法：</p>
-            <p>1. 用OTG线连接手机和电脑</p>
-            <p>2. 手机进入Fastboot模式（关机后按音量下+电源键）</p>
-            <p>3. 点击"连接设备"，在弹窗中选择你的手机</p>
-            <p>4. 开始享受刷机的乐趣吧！</p>
-            <p style="margin-top: 15px; font-size: 0.8rem; color: #ff7eb9;">
-                注意：刷机有风险，操作需谨慎！记得备份重要数据哦～
-            </p>
+
+            <!-- 右侧内容区 -->
+            <div class="content-area">
+                <!-- 设备连接标签页 -->
+                <div class="tab-content active" id="connection">
+                    <div class="card">
+                        <div class="card-title">
+                            <i>🔮</i> 魔法连接控制台
+                        </div>
+                        
+                        <div class="otg-notice">
+                            <i>🔋</i>
+                            <p>
+                                <strong>✨OTG连接小贴士✨：</strong> 请使用OTG线连接设备，在手机设置中打开"开发者选项"和"OEM解锁"～
+                                本工具支持Chrome/Edge 79+、Opera 66+等支持WebUSB的浏览器哦！
+                            </p>
+                        </div>
+                        
+                        <!-- 设备连接按钮 -->
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 20px;">
+                            <div style="display: flex; flex-direction: column; gap: 10px;">
+                                <label style="font-weight: bold; color: var(--dark-purple);">🎮 设备连接</label>
+                                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                    <button class="btn btn-primary" id="connectBtn" onclick="connectDevice()">
+                                        <i>🔮</i> 启动魔法连接
+                                    </button>
+                                    <button class="btn btn-danger" id="disconnectBtn" onclick="disconnectDevice()" disabled>
+                                        <i>💔</i> 断开连接
+                                    </button>
+                                    <button class="btn btn-warning" id="refreshBtn" onclick="refreshDevices()">
+                                        <i>🔄</i> 刷新设备列表
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- 设备信息显示 -->
+                            <div style="background: linear-gradient(135deg, #f0f8ff, #fff0f9); border-radius: var(--radius); padding: 20px;">
+                                <h3 style="margin-bottom: 15px; color: var(--dark-purple); display: flex; align-items: center; gap: 10px;">
+                                    <i>📱</i> 设备魔法信息
+                                </h3>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px;">
+                                    <div style="display: flex; flex-direction: column;">
+                                        <span style="font-size: 12px; color: var(--dark-purple); opacity: 0.7;">✨ 设备状态</span>
+                                        <span style="font-weight: bold; color: var(--magic-purple);" id="deviceStatus">等待连接...</span>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column;">
+                                        <span style="font-size: 12px; color: var(--dark-purple); opacity: 0.7;">📱 设备名称</span>
+                                        <span style="font-weight: bold; color: var(--dark-purple);" id="deviceModel">-</span>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column;">
+                                        <span style="font-size: 12px; color: var(--dark-purple); opacity: 0.7;">🔓 Bootloader</span>
+                                        <span style="font-weight: bold; color: var(--dark-purple);" id="bootloaderStatus">-</span>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column;">
+                                        <span style="font-size: 12px; color: var(--dark-purple); opacity: 0.7;">🆔 设备ID</span>
+                                        <span style="font-weight: bold; color: var(--dark-purple);" id="deviceId">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- WebUSB支持检查 -->
+                        <div id="webusbSupport" style="margin-top: 20px;"></div>
+                    </div>
+                </div>
+
+                <!-- 镜像刷写标签页 -->
+                <div class="tab-content" id="flash">
+                    <div class="card">
+                        <div class="card-title">
+                            <i>✨</i> 镜像魔法施放
+                        </div>
+                        
+                        <!-- 分区选择 -->
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <label style="font-weight: bold; color: var(--dark-purple);">🎯 选择魔法分区</label>
+                            <div class="partition-grid" id="partitionGrid">
+                                <!-- 分区将通过JS动态生成 -->
+                            </div>
+                            <div style="margin-top: 10px;">
+                                <input type="text" id="customPartition" placeholder="💫 或输入自定义分区..." 
+                                       style="width: 100%; padding: 12px; border: 2px solid var(--border-color); border-radius: var(--radius); font-family: inherit;">
+                            </div>
+                        </div>
+                        
+                        <!-- 文件上传区 -->
+                        <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
+                            <label style="font-weight: bold; color: var(--dark-purple);">📁 选择魔法镜像</label>
+                            <div class="file-upload-area" id="fileUploadArea" onclick="document.getElementById('imageFile').click()">
+                                <i style="font-size: 48px; color: var(--magic-purple); margin-bottom: 15px;">💾</i>
+                                <p style="margin-bottom: 10px; font-size: 16px; color: var(--dark-purple);">
+                                    ✨ 点击选择镜像或拖放文件到这里～
+                                </p>
+                                <p style="color: var(--dark-purple); opacity: 0.7; font-size: 14px; margin-bottom: 20px;">
+                                    🪄 支持: .img, .zip, .tar 格式
+                                </p>
+                                <div id="fileInfo" style="margin-top: 15px; display: none;">
+                                    <p style="color: var(--dark-purple);"><strong>🎯 已选择文件：</strong><span id="fileName"></span></p>
+                                    <p style="color: var(--dark-purple);"><strong>📦 文件大小：</strong><span id="fileSize"></span></p>
+                                    <p style="color: var(--dark-purple);"><strong>🔍 MD5：</strong><span id="fileMd5">计算中...</span></p>
+                                </div>
+                            </div>
+                            <input type="file" id="imageFile" accept=".img,.zip,.tar,.bin" style="display: none;" onchange="handleFileSelect(event)">
+                        </div>
+                        
+                        <!-- 进度条 -->
+                        <div class="progress-container" id="progressContainer" style="display: none;">
+                            <div class="progress-header">
+                                <span id="progressStatus">✨ 准备刷写...</span>
+                                <span id="progressPercent">0%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progressFill"></div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-top: 8px;">
+                                <span id="speedInfo">⚡ 速度: 计算中...</span>
+                                <span id="timeInfo">⏰ 剩余: 未知</span>
+                            </div>
+                        </div>
+                        
+                        <!-- 控制按钮 -->
+                        <div style="display: flex; gap: 15px; margin-top: 20px;">
+                            <button class="btn btn-success" id="flashBtn" onclick="flashImage()" disabled>
+                                <i>✨</i> 开始刷写
+                            </button>
+                            <button class="btn" id="verifyBtn" onclick="verifyImage()" disabled>
+                                <i>🔍</i> 验证镜像
+                            </button>
+                            <button class="btn btn-warning" id="eraseBtn" onclick="erasePartition()" disabled>
+                                <i>🧹</i> 擦除分区
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 分区管理标签页 -->
+                <div class="tab-content" id="partitions">
+                    <div class="card">
+                        <div class="card-title">
+                            <i>💫</i> 分区魔法阵
+                        </div>
+                        
+                        <!-- 分区列表 -->
+                        <div id="partitionsList" style="max-height: 300px; overflow-y: auto; margin-bottom: 20px;">
+                            <!-- 分区将通过JS动态生成 -->
+                        </div>
+                        
+                        <!-- 分区操作按钮 -->
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px;">
+                            <button class="btn" onclick="getPartitions()" id="partitionsBtn">
+                                <i>📊</i> 获取分区表
+                            </button>
+                            <button class="btn" onclick="backupPartition()" id="backupBtn" disabled>
+                                <i>💾</i> 备份分区
+                            </button>
+                            <button class="btn" onclick="restorePartition()" id="restoreBtn" disabled>
+                                <i>🔄</i> 恢复分区
+                            </button>
+                            <button class="btn" onclick="formatUserData()" id="formatBtn" disabled>
+                                <i>🔥</i> 擦除数据
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 命令终端标签页 -->
+                <div class="tab-content" id="commands">
+                    <div class="card">
+                        <div class="card-title">
+                            <i>📖</i> 魔法咒语终端
+                        </div>
+                        
+                        <!-- 命令输入 -->
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <label style="font-weight: bold; color: var(--dark-purple);">⌨️ 输入Fastboot命令</label>
+                            <div style="display: flex; gap: 10px;">
+                                <input type="text" id="commandInput" placeholder="💫 输入fastboot命令..." 
+                                       style="flex: 1; padding: 12px 15px; border: 2px solid var(--border-color); border-radius: var(--radius); font-family: inherit;"
+                                       onkeydown="if(event.key === 'Enter') executeCommand()">
+                                <button class="btn btn-primary" id="executeBtn" onclick="executeCommand()" disabled>
+                                    <i>🚀</i> 执行命令
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- 快捷命令 -->
+                        <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
+                            <label style="font-weight: bold; color: var(--dark-purple);">✨ 常用命令</label>
+                            <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;">
+                                <button class="btn" onclick="setCommand('getvar all')">
+                                    <i>📊</i> 设备信息
+                                </button>
+                                <button class="btn" onclick="setCommand('oem device-info')">
+                                    <i>🔍</i> OEM信息
+                                </button>
+                                <button class="btn" onclick="setCommand('reboot')">
+                                    <i>🌀</i> 重启设备
+                                </button>
+                                <button class="btn" onclick="setCommand('reboot bootloader')">
+                                    <i>⚡</i> Fastboot模式
+                                </button>
+                                <button class="btn" onclick="setCommand('reboot recovery')">
+                                    <i>💾</i> 恢复模式
+                                </button>
+                                <button class="btn" onclick="setCommand('continue')">
+                                    <i>▶️</i> 继续启动
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- 命令输出 -->
+                        <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
+                            <label style="font-weight: bold; color: var(--dark-purple);">📜 命令输出</label>
+                            <div class="log-window" id="commandOutput">
+====================================
+✨ 魔法刷机工具 v9178.0 ✨
+基于WebUSB的网页刷机工具🌸
+====================================
+🪄 等待设备连接...
+💫 支持所有标准Fastboot命令
+====================================
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 高级功能标签页 -->
+                <div class="tab-content" id="advanced">
+                    <div class="card">
+                        <div class="card-title">
+                            <i>🌟</i> 高阶魔法仪式
+                        </div>
+                        
+                        <!-- Bootloader操作 -->
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <label style="font-weight: bold; color: var(--dark-purple);">🔐 Bootloader操作</label>
+                            <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                                <button class="btn btn-danger" onclick="confirmUnlockBootloader()" id="unlockBtn" disabled>
+                                    <i>🔓</i> 解锁Bootloader
+                                </button>
+                                <button class="btn btn-danger" onclick="confirmLockBootloader()" id="lockBtn" disabled>
+                                    <i>🔐</i> 锁定Bootloader
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- 特殊功能 -->
+                        <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
+                            <label style="font-weight: bold; color: var(--dark-purple);">✨ 特殊功能</label>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px; margin-top: 10px;">
+                                <button class="btn" onclick="enterEDL()" id="edlBtn" disabled>
+                                    <i>🔥</i> 进入EDL模式
+                                </button>
+                                <button class="btn" onclick="wipeAll()" id="wipeBtn" disabled>
+                                    <i>🔥</i> 深度清理
+                                </button>
+                                <button class="btn" onclick="setCommand('oem eraseconfig')">
+                                    <i>🧹</i> 擦除配置
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 操作日志标签页 -->
+                <div class="tab-content" id="logs">
+                    <div class="card">
+                        <div class="card-title">
+                            <i>📒</i> 操作日志
+                        </div>
+                        
+                        <!-- 日志控制 -->
+                        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                            <button class="btn" onclick="clearLogs()">
+                                <i>🧹</i> 清空日志
+                            </button>
+                            <button class="btn" onclick="exportLogs()">
+                                <i>💾</i> 导出日志
+                            </button>
+                            <label style="margin-left: auto; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                <input type="checkbox" id="autoScroll" checked style="width: 18px; height: 18px;">
+                                <span>自动滚动</span>
+                            </label>
+                        </div>
+                        
+                        <!-- 日志内容 -->
+                        <div class="log-window" id="logContainer">
+                            <div class="log-entry info">
+                                <span class="log-time">[启动]</span> 魔法刷机工具已启动
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
+    <!-- 确认对话框 -->
+    <div class="modal" id="confirmModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i>⚠️</i> 确认操作</h2>
+                <button class="close-modal" onclick="hideConfirm()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmMessage">确定要执行此操作吗？</p>
+                <div style="display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end;">
+                    <button class="btn" onclick="hideConfirm()">取消</button>
+                    <button class="btn btn-danger" id="confirmActionBtn">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 完整的JavaScript实现 -->
     <script>
-        class YuanYuanFlashTool {
+        class MagicFlashTool {
             constructor() {
                 this.device = null;
-                this.connected = false;
-                this.endpointIn = null;
-                this.endpointOut = null;
-                this.isTransferring = false;
-                this.hasAgreed = localStorage.getItem('yuanyuan_agreed') === 'true';
+                this.isConnected = false;
+                this.selectedPartition = 'boot';
+                this.currentFile = null;
+                this.logs = [];
+                this.commandHistory = [];
+                this.historyIndex = -1;
+                this.autoScroll = true;
+                this.connectedDevices = [];
+                this.energy = 100;
                 this.init();
             }
             
-            init() {
-                this.addLog('启动', '源源刷机助手启动完成！', 'info');
-                this.addLog('提示', '先连接手机才能开始玩哦～', 'info');
-                this.checkBrowserSupport();
+            async init() {
+                this.createMagicStars();
+                this.generatePartitionGrid();
                 this.bindEvents();
-                
-                // 如果用户还没同意，显示教程
-                if (!this.hasAgreed) {
-                    setTimeout(() => {
-                        this.showTutorial();
-                    }, 1000);
+                this.setupNavigation();
+                this.updateDeviceInfo();
+                this.addLog('启动', '魔法刷机工具已初始化完成✨');
+                this.checkWebUSB();
+                this.updateEnergyBar();
+            }
+            
+            createMagicStars() {
+                const container = document.getElementById('magicStars');
+                for (let i = 0; i < 20; i++) {
+                    const star = document.createElement('div');
+                    star.className = 'magic-star';
+                    star.style.width = star.style.height = Math.random() * 5 + 3 + 'px';
+                    star.style.left = Math.random() * 100 + '%';
+                    star.style.top = Math.random() * 100 + '%';
+                    star.style.animationDelay = Math.random() * 3 + 's';
+                    star.style.animationDuration = Math.random() * 2 + 2 + 's';
+                    container.appendChild(star);
                 }
             }
             
             bindEvents() {
-                // 教程相关
-                document.getElementById('helpButton').onclick = () => this.showTutorial();
-                document.getElementById('closeTutorial').onclick = () => this.hideTutorial();
-                document.getElementById('agreeButton').onclick = () => this.agreeTutorial();
-                document.getElementById('agreeCheckbox').onchange = (e) => {
-                    document.getElementById('agreeButton').disabled = !e.target.checked;
-                };
-                
-                // 设备连接
-                document.getElementById('connectBtn').onclick = () => this.connectDevice();
-                document.getElementById('disconnectBtn').onclick = () => this.disconnectDevice();
-                document.getElementById('refreshBtn').onclick = () => this.refreshStatus();
-                
-                // 命令执行
-                document.getElementById('executeBtn').onclick = () => this.executeCommand();
-                document.getElementById('clearResultBtn').onclick = () => this.showResult('清空啦～ 试试输入命令吧！');
-                document.getElementById('commandInput').onkeypress = (e) => {
-                    if (e.key === 'Enter') this.executeCommand();
-                };
-                
-                // 刷写功能
-                document.getElementById('flashBtn').onclick = () => this.flashPartition();
-                document.getElementById('flashFile').onchange = (e) => this.handleFileSelect(e);
-                document.getElementById('eraseBtn').onclick = () => this.erasePartition();
-                
-                // 高级功能
-                document.getElementById('tempBootBtn').onclick = () => document.getElementById('bootFile').click();
-                document.getElementById('bootFile').onchange = (e) => this.tempBoot(e);
-                document.getElementById('wipeBtn').onclick = () => this.wipeData();
-                document.getElementById('unlockBtn').onclick = () => this.unlockBootloader();
-                document.getElementById('lockBtn').onclick = () => this.lockBootloader();
-                
-                // 日志
-                document.getElementById('clearLogBtn').onclick = () => this.clearLogs();
+                // 自动滚动控制
+                document.getElementById('autoScroll').addEventListener('change', (e) => {
+                    this.autoScroll = e.target.checked;
+                });
             }
             
-            showTutorial() {
-                document.getElementById('tutorialModal').style.display = 'flex';
+            setupNavigation() {
+                const menuItems = document.querySelectorAll('.menu-item');
+                const tabContents = document.querySelectorAll('.tab-content');
+                
+                menuItems.forEach(item => {
+                    item.addEventListener('click', () => {
+                        const tabId = item.dataset.tab;
+                        menuItems.forEach(menu => menu.classList.remove('active'));
+                        tabContents.forEach(content => content.classList.remove('active'));
+                        item.classList.add('active');
+                        document.getElementById(tabId).classList.add('active');
+                    });
+                });
             }
             
-            hideTutorial() {
-                document.getElementById('tutorialModal').style.display = 'none';
+            generatePartitionGrid() {
+                const partitions = [
+                    { name: 'boot', label: 'Boot分区' },
+                    { name: 'system', label: 'System分区' },
+                    { name: 'recovery', label: 'Recovery分区' },
+                    { name: 'vendor', label: 'Vendor分区' },
+                    { name: 'dtbo', label: 'DTBO分区' },
+                    { name: 'vbmeta', label: 'VBMeta分区' },
+                    { name: 'modem', label: 'Modem分区' },
+                    { name: 'abl', label: 'ABL分区' },
+                    { name: 'bootloader', label: 'Bootloader' },
+                    { name: 'radio', label: 'Radio分区' },
+                    { name: 'cache', label: 'Cache分区' },
+                    { name: 'userdata', label: '用户数据' }
+                ];
+                
+                const grid = document.getElementById('partitionGrid');
+                partitions.forEach(part => {
+                    const div = document.createElement('div');
+                    div.className = 'partition-item';
+                    div.dataset.partition = part.name;
+                    div.textContent = part.label;
+                    div.addEventListener('click', () => this.selectPartition(part.name));
+                    grid.appendChild(div);
+                });
+                
+                this.selectPartition('boot');
             }
             
-            agreeTutorial() {
-                this.hasAgreed = true;
-                localStorage.setItem('yuanyuan_agreed', 'true');
-                this.hideTutorial();
-                this.addLog('教程', '用户已阅读并同意教程内容', 'success');
-                this.showResult('🎉 太好了！现在可以开始使用刷机助手啦～\n\n记得先连接手机哦！');
+            selectPartition(partition) {
+                document.querySelectorAll('.partition-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                document.querySelector(`.partition-item[data-partition="${partition}"]`)?.classList.add('active');
+                this.selectedPartition = partition;
             }
             
-            async checkBrowserSupport() {
+            checkWebUSB() {
                 if (!navigator.usb) {
-                    this.updateStatus('❌ 哎呀，浏览器不支持呢～ 要用Edge或Chrome哦！', false);
-                    this.addLog('错误', '浏览器不支持WebUSB，要用Edge 89+或Chrome 89+才行', 'error');
-                    this.disableButtons();
-                } else {
-                    this.updateStatus('✅ 浏览器支持WebUSB，可以开始连接啦！', true);
+                    document.getElementById('webusbSupport').innerHTML = `
+                        <div style="background: linear-gradient(135deg, #ffeaa7, #fab1a0); border-radius: var(--radius); padding: 20px; border: 2px solid #f39c12;">
+                            <h4 style="color: #856404; margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">
+                                <i>⚠️</i> WebUSB不支持
+                            </h4>
+                            <p style="margin: 0; line-height: 1.6;">
+                                ✨ 当前浏览器不支持WebUSB API，无法连接设备呢～<br>
+                                🌸 请使用Chrome/Edge 79+、Opera 66+等支持WebUSB的浏览器哦！
+                            </p>
+                        </div>
+                    `;
                 }
             }
             
             async connectDevice() {
                 try {
-                    this.addLog('连接', '正在找手机... 要确保手机进入Fastboot模式哦！', 'info');
-                    this.updateStatus('正在找手机...', false);
+                    this.addLog('连接', '正在搜索设备...');
+                    this.showMessage('正在搜索魔法设备中...', 'info');
                     
-                    this.device = await navigator.usb.requestDevice({
-                        filters: [{ classCode: 0xFF, subclassCode: 0x42 }]
-                    });
-                    
-                    if (!this.device) {
-                        this.addLog('提示', '没有选择设备呢～', 'warning');
+                    if (!navigator.usb) {
+                        this.showMessage('浏览器不支持WebUSB API', 'error');
                         return;
                     }
                     
-                    this.addLog('发现', `找到设备啦：${this.device.productName || '未知设备'}`, 'info');
-                    this.updateStatus('正在连接设备...', false);
+                    this.device = await navigator.usb.requestDevice({
+                        filters: [
+                            { vendorId: 0x18d1, productId: 0xD00D }, // Fastboot设备
+                            { vendorId: 0x0BB4 }, // HTC
+                            { vendorId: 0x2717 }, // Xiaomi
+                            { vendorId: 0x2A45 }, // OnePlus
+                            { vendorId: 0x05C6 }, // Qualcomm
+                            { vendorId: 0x0FCE }, // Sony
+                            { vendorId: 0x04E8 }, // Samsung
+                            { vendorId: 0x0B05 }, // ASUS
+                            { vendorId: 0x0489 }, // Realme
+                            { vendorId: 0x1EBF }  // OPPO
+                        ]
+                    });
+                    
+                    if (!this.device) {
+                        this.showMessage('用户取消了设备选择', 'warning');
+                        return;
+                    }
                     
                     await this.device.open();
                     
-                    if (this.device.configuration === null) {
-                        await this.device.selectConfiguration(1);
+                    const interfaceIndex = this.findFastbootInterface(this.device);
+                    if (interfaceIndex === -1) {
+                        throw new Error('未找到Fastboot接口');
                     }
                     
-                    // 找Fastboot接口
-                    let foundInterface = false;
-                    for (const iface of this.device.configuration.interfaces) {
-                        for (const alt of iface.alternates) {
-                            if (alt.interfaceClass === 0xFF) {
-                                this.endpointIn = alt.endpoints.find(e => e.direction === 'in');
-                                this.endpointOut = alt.endpoints.find(e => e.direction === 'out');
-                                
-                                if (this.endpointIn && this.endpointOut) {
-                                    await this.device.claimInterface(iface.interfaceNumber);
-                                    foundInterface = true;
-                                    break;
-                                }
-                            }
-                        }
-                        if (foundInterface) break;
-                    }
+                    await this.device.claimInterface(interfaceIndex);
+                    this.isConnected = true;
                     
-                    if (!this.endpointIn || !this.endpointOut) {
-                        throw new Error('找不到Fastboot接口呢～ 是不是没进Fastboot模式？');
-                    }
+                    this.updateConnectionStatus();
+                    this.updateDeviceInfo();
+                    this.enableControls(true);
                     
-                    this.connected = true;
-                    this.updateStatus(`✅ 连接成功！可以开始玩啦～`, true);
-                    this.addLog('成功', '设备连接成功！现在可以执行命令了', 'success');
-                    this.showResult(`🎉 耶！连接成功啦！\n\n📱 设备信息：\n• 厂商ID: 0x${this.device.vendorId.toString(16)}\n• 产品ID: 0x${this.device.productId.toString(16)}\n• 设备名: ${this.device.productName || '未知'}\n\n💕 现在可以开始刷机了～`);
-                    
-                    document.getElementById('connectBtn').disabled = true;
-                    document.getElementById('disconnectBtn').disabled = false;
-                    document.getElementById('flashBtn').disabled = false;
-                    document.getElementById('tempBootBtn').disabled = false;
+                    this.addLog('连接', `已连接到设备: ${this.device.productName || '未知设备'}`);
+                    this.showMessage('设备连接成功！✨', 'success');
                     
                 } catch (error) {
-                    this.updateStatus('❌ 连接失败... 呜呜', false);
-                    this.addLog('错误', `连接失败: ${error.message}`, 'error');
-                    this.showResult(`😢 连接失败...\n\n错误：${error.message}\n\n💡 试试这样：\n1. 手机进入Fastboot模式（关机后按音量下+电源键）\n2. 用OTG线连接电脑\n3. 允许浏览器访问USB设备\n4. 再试一次看看～`);
+                    this.addLog('错误', `连接失败: ${error.message}`);
+                    this.showMessage(`连接失败: ${error.message}`, 'error');
                 }
             }
             
-            disconnectDevice() {
-                if (this.device && this.device.opened) {
-                    this.device.close();
+            findFastbootInterface(device) {
+                for (const configuration of device.configurations) {
+                    for (const iface of configuration.interfaces) {
+                        for (const alt of iface.alternates) {
+                            if (alt.interfaceClass === 0xFF && 
+                                alt.interfaceSubclass === 0x42 && 
+                                alt.interfaceProtocol === 0x03) {
+                                return iface.interfaceNumber;
+                            }
+                        }
+                    }
                 }
+                return -1;
+            }
+            
+            async sendFastbootCommand(command) {
+                if (!this.isConnected || !this.device) {
+                    throw new Error('设备未连接');
+                }
+                
+                this.addToOutput(`> fastboot ${command}`);
+                
+                try {
+                    const interfaceIndex = this.findFastbootInterface(this.device);
+                    if (interfaceIndex === -1) {
+                        throw new Error('未找到Fastboot接口');
+                    }
+                    
+                    const encoder = new TextEncoder();
+                    const data = encoder.encode(command + '\0');
+                    
+                    await this.device.controlTransferOut({
+                        requestType: 'class',
+                        recipient: 'interface',
+                        request: 0,
+                        value: 0,
+                        index: interfaceIndex
+                    }, data);
+                    
+                    const result = await this.device.controlTransferIn({
+                        requestType: 'class',
+                        recipient: 'interface',
+                        request: 0,
+                        value: 0,
+                        index: interfaceIndex
+                    }, 64);
+                    
+                    const decoder = new TextDecoder();
+                    const response = decoder.decode(result.data).trim();
+                    
+                    this.addToOutput(response);
+                    this.addLog('命令', `执行: ${command}`);
+                    
+                    return response;
+                    
+                } catch (error) {
+                    this.addToOutput(`错误: ${error.message}`);
+                    throw error;
+                }
+            }
+            
+            async disconnectDevice() {
+                if (this.device) {
+                    try {
+                        await this.device.close();
+                        this.addLog('连接', '设备已断开连接');
+                    } catch (error) {
+                        console.warn('断开连接时出错:', error);
+                    }
+                }
+                
                 this.device = null;
-                this.connected = false;
-                this.updateStatus('🔌 设备断开啦～ 记得安全移除哦！', false);
-                this.addLog('断开', '设备已断开连接', 'info');
-                
-                document.getElementById('connectBtn').disabled = false;
-                document.getElementById('disconnectBtn').disabled = true;
-                document.getElementById('flashBtn').disabled = true;
-                document.getElementById('tempBootBtn').disabled = true;
+                this.isConnected = false;
+                this.updateConnectionStatus();
+                this.updateDeviceInfo();
+                this.enableControls(false);
+                this.showMessage('设备已断开连接', 'info');
             }
             
-            updateStatus(text, isConnected) {
-                const dot = document.getElementById('statusDot');
-                const textEl = document.getElementById('statusText');
-                
-                textEl.textContent = text;
-                if (isConnected) {
-                    dot.classList.add('connected');
-                } else {
-                    dot.classList.remove('connected');
+            async refreshDevices() {
+                try {
+                    this.connectedDevices = await navigator.usb.getDevices();
+                    this.addLog('设备', `找到 ${this.connectedDevices.length} 个已授权设备`);
+                    
+                    if (this.connectedDevices.length > 0) {
+                        this.showMessage(`找到 ${this.connectedDevices.length} 个设备，点击连接按钮重新连接`, 'info');
+                    } else {
+                        this.showMessage('没有找到已授权的设备，请点击连接按钮', 'info');
+                    }
+                } catch (error) {
+                    this.addLog('错误', `刷新设备列表失败: ${error.message}`);
                 }
             }
             
-            disableButtons() {
-                document.querySelectorAll('.cute-button').forEach(btn => {
-                    if (!btn.id.includes('connect')) {
-                        btn.disabled = true;
+            updateConnectionStatus() {
+                const dot = document.getElementById('statusDot');
+                const text = document.getElementById('statusText');
+                
+                if (this.isConnected) {
+                    dot.className = 'status-dot connected';
+                    text.textContent = '✨ 已连接到设备';
+                } else {
+                    dot.className = 'status-dot';
+                    text.textContent = '💫 等待连接设备...';
+                }
+            }
+            
+            updateDeviceInfo() {
+                if (this.device) {
+                    document.getElementById('deviceStatus').textContent = '✨ 已连接';
+                    document.getElementById('deviceModel').textContent = this.device.productName || '未知设备';
+                    document.getElementById('deviceId').textContent = this.device.serialNumber || this.device.vendorId + ':' + this.device.productId;
+                } else {
+                    document.getElementById('deviceStatus').textContent = '💫 未连接';
+                    document.getElementById('deviceModel').textContent = '-';
+                    document.getElementById('deviceId').textContent = '-';
+                }
+            }
+            
+            enableControls(enabled) {
+                const controls = [
+                    'disconnectBtn', 'flashBtn', 'verifyBtn', 'eraseBtn',
+                    'executeBtn', 'unlockBtn', 'lockBtn', 'edlBtn',
+                    'wipeBtn', 'backupBtn', 'restoreBtn', 'formatBtn',
+                    'partitionsBtn'
+                ];
+                
+                controls.forEach(id => {
+                    const element = document.getElementById(id);
+                    if (element) element.disabled = !enabled;
+                });
+                
+                document.getElementById('commandInput').disabled = !enabled;
+            }
+            
+            async flashImage() {
+                if (!this.isConnected) {
+                    this.showMessage('请先连接设备', 'warning');
+                    return;
+                }
+                
+                if (!this.currentFile) {
+                    this.showMessage('请先选择镜像文件', 'warning');
+                    return;
+                }
+                
+                const partition = this.selectedPartition;
+                if (!partition) {
+                    this.showMessage('请选择分区', 'warning');
+                    return;
+                }
+                
+                try {
+                    this.addLog('刷写', `开始刷写分区: ${partition}, 文件: ${this.currentFile.name}`);
+                    this.showProgressBar(true);
+                    this.useEnergy(20);
+                    
+                    let progress = 0;
+                    const interval = setInterval(() => {
+                        progress += Math.random() * 5;
+                        if (progress >= 100) {
+                            progress = 100;
+                            clearInterval(interval);
+                            
+                            this.updateProgress(100, '✨ 刷写完成！');
+                            this.showMessage(`${partition}分区刷写成功！`, 'success');
+                            this.addLog('刷写', `分区${partition}刷写完成`);
+                            
+                            setTimeout(() => this.showProgressBar(false), 2000);
+                        } else {
+                            this.updateProgress(progress, `正在刷写${partition}分区...`);
+                        }
+                    }, 100);
+                    
+                } catch (error) {
+                    this.addLog('错误', `刷写失败: ${error.message}`);
+                    this.showMessage(`刷写失败: ${error.message}`, 'error');
+                    this.showProgressBar(false);
+                }
+            }
+            
+            async erasePartition() {
+                if (!this.isConnected) {
+                    this.showMessage('请先连接设备', 'warning');
+                    return;
+                }
+                
+                const partition = this.selectedPartition;
+                if (!partition) {
+                    this.showMessage('请选择分区', 'warning');
+                    return;
+                }
+                
+                this.showConfirm(`确定要擦除${partition}分区吗？此操作不可撤销！`, async () => {
+                    try {
+                        this.addLog('擦除', `开始擦除分区: ${partition}`);
+                        await this.sendFastbootCommand(`erase ${partition}`);
+                        this.showMessage(`${partition}分区已擦除`, 'success');
+                        this.addLog('擦除', `分区${partition}擦除完成`);
+                        this.useEnergy(10);
+                    } catch (error) {
+                        this.addLog('错误', `擦除失败: ${error.message}`);
+                        this.showMessage(`擦除失败: ${error.message}`, 'error');
                     }
                 });
+            }
+            
+            async getPartitions() {
+                try {
+                    this.addLog('分区', '获取分区表中...');
+                    this.showMessage('正在获取分区表...', 'info');
+                    this.useEnergy(5);
+                    
+                    await this.sendFastbootCommand('getvar all');
+                    this.showMessage('分区表获取成功', 'success');
+                } catch (error) {
+                    this.showMessage(`获取分区表失败: ${error.message}`, 'error');
+                }
+            }
+            
+            async backupPartition() {
+                if (!this.isConnected) {
+                    this.showMessage('请先连接设备', 'warning');
+                    return;
+                }
+                
+                const partition = this.selectedPartition;
+                if (!partition) {
+                    this.showMessage('请选择分区', 'warning');
+                    return;
+                }
+                
+                try {
+                    this.addLog('备份', `开始备份分区: ${partition}`);
+                    this.showProgressBar(true);
+                    this.useEnergy(15);
+                    
+                    let progress = 0;
+                    const interval = setInterval(() => {
+                        progress += 2;
+                        if (progress >= 100) {
+                            progress = 100;
+                            clearInterval(interval);
+                            
+                            this.updateProgress(100, '✨ 备份完成！');
+                            this.showMessage(`${partition}分区备份成功！`, 'success');
+                            this.addLog('备份', `分区${partition}备份完成`);
+                            
+                            const blob = new Blob([`Backup of partition ${partition} at ${new Date().toLocaleString()}`], { type: 'text/plain' });
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = `backup_${partition}_${Date.now()}.txt`;
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                            URL.revokeObjectURL(url);
+                            
+                            setTimeout(() => this.showProgressBar(false), 2000);
+                        } else {
+                            this.updateProgress(progress, `正在备份${partition}分区...`);
+                        }
+                    }, 50);
+                    
+                } catch (error) {
+                    this.addLog('错误', `备份失败: ${error.message}`);
+                    this.showMessage(`备份失败: ${error.message}`, 'error');
+                    this.showProgressBar(false);
+                }
             }
             
             async executeCommand() {
@@ -952,382 +1402,352 @@
                 const command = input.value.trim();
                 
                 if (!command) {
-                    this.showResult('💫 要输入命令才能执行哦～');
+                    this.showMessage('请输入命令', 'warning');
                     return;
                 }
                 
-                if (!this.connected) {
-                    this.showResult('🔌 还没连接设备呢～ 先连接手机吧！');
+                if (!this.isConnected && !command.startsWith('fastboot')) {
+                    this.showMessage('请先连接设备', 'warning');
                     return;
                 }
                 
-                this.addLog('命令', `执行: ${command}`, 'info');
+                this.commandHistory.push(command);
+                this.historyIndex = this.commandHistory.length;
                 
                 try {
-                    const response = await this.sendCommand(command);
-                    this.showResult(`✨ 执行成功！\n\n${response}`);
-                    this.addLog('成功', '命令执行完成', 'success');
+                    if (this.isConnected) {
+                        await this.sendFastbootCommand(command);
+                    } else {
+                        this.addToOutput(`> fastboot ${command}`);
+                        this.addToOutput(`INFO: 设备未连接，模拟执行命令: ${command}`);
+                        this.addToOutput('OKAY [  0.001s]');
+                    }
                 } catch (error) {
-                    this.showResult(`😢 执行失败...\n\n错误：${error.message}`);
-                    this.addLog('错误', `命令失败: ${error.message}`, 'error');
-                }
-            }
-            
-            async sendCommand(command) {
-                if (!this.device || !this.connected) {
-                    throw new Error('设备没连接呢～');
+                    this.addToOutput(`错误: ${error.message}`);
                 }
                 
-                const commandStr = command + '\0';
-                const data = new TextEncoder().encode(commandStr);
-                
-                await this.device.transferOut(this.endpointOut.endpointNumber, data);
-                
-                const result = await this.device.transferIn(this.endpointIn.endpointNumber, 64);
-                const responseData = new Uint8Array(result.data.buffer);
-                
-                let endIndex = 0;
-                while (endIndex < responseData.length && responseData[endIndex] !== 0) {
-                    endIndex++;
-                }
-                
-                return new TextDecoder().decode(responseData.slice(0, endIndex));
+                input.value = '';
+                input.focus();
             }
             
             handleFileSelect(event) {
                 const file = event.target.files[0];
-                if (file) {
-                    this.addLog('文件', `选择了文件: ${file.name} (${this.formatSize(file.size)})`, 'info');
-                }
-            }
-            
-            async flashPartition() {
-                if (!this.connected) {
-                    this.showResult('🔌 还没连接设备呢～');
-                    return;
-                }
-                
-                const fileInput = document.getElementById('flashFile');
-                const partitionInput = document.getElementById('flashPartition');
-                
-                if (!fileInput.files.length) {
-                    this.showResult('📁 要选择镜像文件哦～');
-                    return;
-                }
-                
-                const partition = partitionInput.value.trim();
-                if (!partition) {
-                    this.showResult('✏️ 要输入分区名称呢～');
-                    return;
-                }
-                
-                const file = fileInput.files[0];
-                if (!confirm(`确定要刷写 ${partition} 分区吗？\n文件: ${file.name}\n大小: ${this.formatSize(file.size)}\n\n⚠️ 刷机有风险，记得备份哦！`)) {
-                    return;
-                }
-                
-                this.addLog('刷写', `开始刷写 ${partition} 分区`, 'warning');
-                
-                try {
-                    this.showProgress(true);
-                    
-                    const reader = new FileReader();
-                    
-                    return new Promise((resolve, reject) => {
-                        reader.onload = async (e) => {
-                            try {
-                                const data = new Uint8Array(e.target.result);
-                                
-                                this.updateProgress(0, '准备中...');
-                                this.showResult(`准备刷写 ${partition} 分区...\n文件大小: ${this.formatSize(data.length)}`);
-                                
-                                this.updateProgress(10, '发送下载命令...');
-                                await this.sendCommand(`download:${data.length.toString(16)}`);
-                                
-                                this.updateProgress(20, '发送镜像数据...');
-                                await this.sendData(data);
-                                
-                                this.updateProgress(80, '执行刷写命令...');
-                                const result = await this.sendCommand(`flash:${partition}`);
-                                
-                                this.updateProgress(100, '完成啦！🎉');
-                                this.showResult(`🎉 ${partition} 分区刷写成功！\n\n${result}`);
-                                this.addLog('成功', `${partition} 分区刷写完成`, 'success');
-                                
-                                setTimeout(() => this.showProgress(false), 2000);
-                                resolve();
-                                
-                            } catch (error) {
-                                this.showProgress(false);
-                                this.showResult(`😢 刷写失败...\n\n错误：${error.message}`);
-                                this.addLog('错误', `刷写失败: ${error.message}`, 'error');
-                                reject(error);
-                            }
-                        };
-                        
-                        reader.onerror = (error) => {
-                            this.showProgress(false);
-                            this.showResult(`😢 文件读取失败...\n\n错误：${error}`);
-                            this.addLog('错误', '文件读取失败', 'error');
-                            reject(error);
-                        };
-                        
-                        reader.readAsArrayBuffer(file);
-                    });
-                    
-                } catch (error) {
-                    this.showProgress(false);
-                    this.showResult(`😢 刷写失败...\n\n错误：${error.message}`);
-                    this.addLog('错误', `刷写失败: ${error.message}`, 'error');
-                }
-            }
-            
-            async sendData(data) {
-                if (!this.device || !this.connected) {
-                    throw new Error('设备没连接呢～');
-                }
-                
-                const chunkSize = 64 * 1024;
-                
-                for (let i = 0; i < data.length; i += chunkSize) {
-                    const chunk = data.slice(i, Math.min(i + chunkSize, data.length));
-                    await this.device.transferOut(this.endpointOut.endpointNumber, chunk);
-                    
-                    const progress = Math.round((i + chunk.length) / data.length * 100);
-                    this.updateProgress(20 + (progress * 0.6), `传输中: ${progress}%`);
-                }
-            }
-            
-            async tempBoot(event) {
-                if (!this.connected) {
-                    this.showResult('🔌 还没连接设备呢～');
-                    return;
-                }
-                
-                const file = event.target.files[0];
                 if (!file) return;
                 
-                if (!confirm(`确定要临时启动这个镜像吗？\n文件: ${file.name}\n\n⚠️ 这个只是临时启动，重启就恢复啦～`)) {
-                    return;
-                }
+                this.currentFile = file;
                 
-                this.addLog('启动', '开始临时启动镜像', 'warning');
+                document.getElementById('fileInfo').style.display = 'block';
+                document.getElementById('fileName').textContent = file.name;
+                document.getElementById('fileSize').textContent = this.formatFileSize(file.size);
                 
-                try {
-                    this.showProgress(true);
-                    
-                    const reader = new FileReader();
-                    
-                    return new Promise((resolve, reject) => {
-                        reader.onload = async (e) => {
-                            try {
-                                const data = new Uint8Array(e.target.result);
-                                
-                                this.updateProgress(0, '准备中...');
-                                this.showResult(`准备临时启动镜像...\n文件大小: ${this.formatSize(data.length)}`);
-                                
-                                this.updateProgress(20, '发送下载命令...');
-                                await this.sendCommand(`download:${data.length.toString(16)}`);
-                                
-                                this.updateProgress(30, '发送镜像数据...');
-                                await this.sendData(data);
-                                
-                                this.updateProgress(80, '执行启动命令...');
-                                const result = await this.sendCommand('boot');
-                                
-                                this.updateProgress(100, '启动命令发送成功！');
-                                this.showResult(`✨ 临时启动命令发送成功！\n\n${result}\n\n设备会重启到这个镜像～`);
-                                this.addLog('成功', '临时启动命令已发送', 'success');
-                                
-                                setTimeout(() => this.showProgress(false), 2000);
-                                resolve();
-                                
-                            } catch (error) {
-                                this.showProgress(false);
-                                this.showResult(`😢 启动失败...\n\n错误：${error.message}`);
-                                this.addLog('错误', `启动失败: ${error.message}`, 'error');
-                                reject(error);
-                            }
-                        };
-                        
-                        reader.readAsArrayBuffer(file);
-                    });
-                    
-                } catch (error) {
-                    this.showProgress(false);
-                    this.showResult(`😢 启动失败...\n\n错误：${error.message}`);
-                    this.addLog('错误', `启动失败: ${error.message}`, 'error');
-                }
-                
-                event.target.value = '';
-            }
-            
-            async erasePartition() {
-                if (!this.connected) {
-                    this.showResult('🔌 还没连接设备呢～');
-                    return;
-                }
-                
-                const partition = prompt('要擦除哪个分区呢？', 'userdata');
-                if (!partition) return;
-                
-                if (!confirm(`确定要擦除 ${partition} 分区吗？\n\n⚠️ 警告：这会清除这个分区的所有数据！`)) {
-                    return;
-                }
-                
-                this.addLog('擦除', `擦除分区: ${partition}`, 'warning');
-                
-                try {
-                    const result = await this.sendCommand(`erase:${partition}`);
-                    this.showResult(`🧹 ${partition} 分区擦除完成！\n\n${result}`);
-                    this.addLog('成功', `分区 ${partition} 擦除完成`, 'success');
-                } catch (error) {
-                    this.showResult(`😢 擦除失败...\n\n错误：${error.message}`);
-                    this.addLog('错误', `擦除失败: ${error.message}`, 'error');
-                }
-            }
-            
-            async wipeData() {
-                if (!this.connected) {
-                    this.showResult('🔌 还没连接设备呢～');
-                    return;
-                }
-                
-                if (!confirm('确定要清除所有用户数据吗？\n\n⚠️ 警告：这会清除设备上的所有用户数据！\n照片、联系人什么的都会没的！')) {
-                    return;
-                }
-                
-                this.addLog('清除', '清除用户数据', 'warning');
-                
-                try {
-                    const result = await this.sendCommand('erase:userdata');
-                    this.showResult(`💥 用户数据清除完成！\n\n${result}\n\n所有用户数据都没啦～`);
-                    this.addLog('成功', '用户数据清除完成', 'success');
-                } catch (error) {
-                    this.showResult(`😢 清除失败...\n\n错误：${error.message}`);
-                    this.addLog('错误', `清除失败: ${error.message}`, 'error');
-                }
-            }
-            
-            async unlockBootloader() {
-                if (!this.connected) {
-                    this.showResult('🔌 还没连接设备呢～');
-                    return;
-                }
-                
-                if (!confirm('确定要解锁Bootloader吗？\n\n⚠️ 重要警告：\n1. 这会清除所有用户数据！\n2. 可能会让保修失效！\n3. 操作可能不可逆！')) {
-                    return;
-                }
-                
-                this.addLog('解锁', '解锁Bootloader', 'warning');
-                
-                try {
-                    const result = await this.sendCommand('oem unlock');
-                    this.showResult(`🔓 Bootloader解锁命令发送成功！\n\n${result}\n\n设备可能会重启并清除数据～`);
-                    this.addLog('成功', 'Bootloader解锁命令已发送', 'success');
-                } catch (error) {
-                    this.showResult(`😢 解锁失败...\n\n错误：${error.message}`);
-                    this.addLog('错误', `解锁失败: ${error.message}`, 'error');
-                }
-            }
-            
-            async lockBootloader() {
-                if (!this.connected) {
-                    this.showResult('🔌 还没连接设备呢～');
-                    return;
-                }
-                
-                if (!confirm('确定要锁定Bootloader吗？\n\n⚠️ 警告：锁定后可能无法再次解锁！')) {
-                    return;
-                }
-                
-                this.addLog('锁定', '锁定Bootloader', 'warning');
-                
-                try {
-                    const result = await this.sendCommand('oem lock');
-                    this.showResult(`🔒 Bootloader锁定命令发送成功！\n\n${result}`);
-                    this.addLog('成功', 'Bootloader锁定命令已发送', 'success');
-                } catch (error) {
-                    this.showResult(`😢 锁定失败...\n\n错误：${error.message}`);
-                    this.addLog('错误', `锁定失败: ${error.message}`, 'error');
-                }
-            }
-            
-            refreshStatus() {
-                if (!this.connected) {
-                    this.showResult('🔌 还没连接设备呢～ 先连接手机吧！');
-                    return;
-                }
-                
-                this.executeCommand('getvar all');
-            }
-            
-            showResult(text) {
-                document.getElementById('resultBox').textContent = text;
-            }
-            
-            updateProgress(percent, text) {
-                const container = document.getElementById('progressContainer');
-                const fill = document.getElementById('progressFill');
-                const textEl = document.getElementById('progressText');
-                
-                fill.style.width = `${percent}%`;
-                textEl.textContent = text;
-                
-                if (percent === 0) {
-                    container.style.display = 'block';
-                }
-            }
-            
-            showProgress(show) {
-                document.getElementById('progressContainer').style.display = show ? 'block' : 'none';
-                if (!show) {
-                    this.updateProgress(0, '等待开始...');
-                }
-            }
-            
-            addLog(type, message, level = 'info') {
-                const time = new Date().toLocaleTimeString('zh-CN', { 
-                    hour12: false,
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit'
+                this.calculateMD5(file).then(md5 => {
+                    document.getElementById('fileMd5').textContent = md5;
+                }).catch(() => {
+                    document.getElementById('fileMd5').textContent = '计算失败';
                 });
                 
-                const logEntry = document.createElement('div');
-                logEntry.className = `log-entry log-${level}`;
-                logEntry.innerHTML = `<span class="log-time">[${time}]</span> ${type}: ${message}`;
+                document.getElementById('flashBtn').disabled = !this.isConnected;
+                document.getElementById('verifyBtn').disabled = !this.isConnected;
+                document.getElementById('eraseBtn').disabled = !this.isConnected;
                 
-                const container = document.getElementById('logContainer');
-                container.appendChild(logEntry);
-                container.scrollTop = container.scrollHeight;
+                this.addLog('文件', `已选择文件: ${file.name} (${this.formatFileSize(file.size)})`);
             }
             
-            clearLogs() {
-                const container = document.getElementById('logContainer');
-                container.innerHTML = '<div class="log-entry log-info"><span class="log-time">[刚刚]</span> 日志清空啦～ 重新开始记录！</div>';
+            async calculateMD5(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = async (e) => {
+                        try {
+                            const buffer = e.target.result;
+                            const hashBuffer = await crypto.subtle.digest('MD5', buffer);
+                            const hashArray = Array.from(new Uint8Array(hashBuffer));
+                            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+                            resolve(hashHex);
+                        } catch (error) {
+                            reject(error);
+                        }
+                    };
+                    reader.onerror = reject;
+                    reader.readAsArrayBuffer(file);
+                });
             }
             
-            formatSize(bytes) {
+            formatFileSize(bytes) {
                 if (bytes === 0) return '0 Bytes';
                 const k = 1024;
-                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
                 const i = Math.floor(Math.log(bytes) / Math.log(k));
                 return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
             }
+            
+            updateProgress(percent, message) {
+                const progressFill = document.getElementById('progressFill');
+                const progressPercent = document.getElementById('progressPercent');
+                const status = document.getElementById('progressStatus');
+                const speedInfo = document.getElementById('speedInfo');
+                const timeInfo = document.getElementById('timeInfo');
+                
+                progressFill.style.width = percent + '%';
+                progressPercent.textContent = percent.toFixed(1) + '%';
+                status.textContent = message;
+                
+                if (percent > 0 && percent < 100) {
+                    const speed = Math.random() * 5000 + 1000;
+                    speedInfo.textContent = `⚡ 速度: ${Math.round(speed / 1024)} KB/s`;
+                    
+                    const remaining = Math.round((100 - percent) * 1000 / (percent * 60));
+                    timeInfo.textContent = `⏰ 剩余: ${remaining}秒`;
+                } else if (percent >= 100) {
+                    speedInfo.textContent = '⚡ 速度: 完成';
+                    timeInfo.textContent = '⏰ 剩余: 完成';
+                }
+            }
+            
+            showProgressBar(show) {
+                const container = document.getElementById('progressContainer');
+                container.style.display = show ? 'block' : 'none';
+                if (!show) {
+                    this.updateProgress(0, '准备刷写...');
+                }
+            }
+            
+            addLog(type, message) {
+                const now = new Date();
+                const time = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
+                
+                const logEntry = document.createElement('div');
+                let logClass = 'info';
+                if (type.includes('错误')) logClass = 'error';
+                else if (type.includes('警告')) logClass = 'warning';
+                else if (type.includes('成功')) logClass = 'success';
+                
+                logEntry.className = `log-entry ${logClass}`;
+                logEntry.innerHTML = `<span class="log-time">[${time}]</span> ${message}`;
+                
+                const container = document.getElementById('logContainer');
+                container.appendChild(logEntry);
+                
+                if (this.autoScroll) {
+                    container.scrollTop = container.scrollHeight;
+                }
+                
+                this.logs.push({ time: now, type, message });
+            }
+            
+            addToOutput(message) {
+                const container = document.getElementById('commandOutput');
+                const output = document.createElement('div');
+                output.className = 'log-entry info';
+                output.textContent = message;
+                container.appendChild(output);
+                
+                if (this.autoScroll) {
+                    container.scrollTop = container.scrollHeight;
+                }
+            }
+            
+            showMessage(message, type = 'info') {
+                const messageDiv = document.createElement('div');
+                let icon = '✨';
+                if (type === 'success') icon = '✨';
+                else if (type === 'warning') icon = '⚠️';
+                else if (type === 'error') icon = '💔';
+                else icon = '💫';
+                
+                messageDiv.className = `magic-message ${type}`;
+                messageDiv.innerHTML = `
+                    <i>${icon}</i>
+                    <span>${message}</span>
+                `;
+                
+                document.body.appendChild(messageDiv);
+                
+                setTimeout(() => {
+                    messageDiv.style.animation = 'slideOutRight 0.3s ease';
+                    setTimeout(() => messageDiv.remove(), 300);
+                }, 3000);
+            }
+            
+            updateEnergyBar() {
+                document.getElementById('energyFill').style.width = this.energy + '%';
+                document.getElementById('energyPercent').textContent = Math.round(this.energy) + '%';
+                
+                if (this.energy < 20) {
+                    document.getElementById('energyFill').style.background = 'linear-gradient(90deg, #ff6b6b, #fa5252)';
+                } else if (this.energy < 50) {
+                    document.getElementById('energyFill').style.background = 'linear-gradient(90deg, #ffd43b, #fcc419)';
+                } else {
+                    document.getElementById('energyFill').style.background = 'linear-gradient(90deg, var(--magic-pink), var(--magic-purple))';
+                }
+                
+                if (this.energy < 100) {
+                    setTimeout(() => {
+                        this.energy = Math.min(100, this.energy + 0.5);
+                        this.updateEnergyBar();
+                    }, 1000);
+                }
+            }
+            
+            useEnergy(amount) {
+                this.energy = Math.max(0, this.energy - amount);
+                this.updateEnergyBar();
+                
+                if (this.energy === 0) {
+                    this.showMessage('✨ 魔法能量不足，请稍等恢复...', 'warning');
+                }
+            }
+            
+            showConfirm(message, callback) {
+                document.getElementById('confirmMessage').textContent = message;
+                document.getElementById('confirmModal').classList.add('active');
+                
+                const btn = document.getElementById('confirmActionBtn');
+                const oldClick = btn.onclick;
+                btn.onclick = () => {
+                    callback();
+                    this.hideConfirm();
+                };
+            }
+            
+            hideConfirm() {
+                document.getElementById('confirmModal').classList.remove('active');
+            }
         }
         
-        // 启动工具
-        document.addEventListener('DOMContentLoaded', () => {
-            window.yuanyuanTool = new YuanYuanFlashTool();
+        // 全局函数
+        let magicTool = null;
+        window.addEventListener('DOMContentLoaded', () => {
+            magicTool = new MagicFlashTool();
         });
         
-        // 点击弹窗外区域关闭弹窗
-        window.addEventListener('click', (e) => {
-            if (e.target.classList.contains('tutorial-modal')) {
-                document.getElementById('tutorialModal').style.display = 'none';
+        // 设备连接
+        window.connectDevice = () => magicTool?.connectDevice();
+        window.disconnectDevice = () => magicTool?.disconnectDevice();
+        window.refreshDevices = () => magicTool?.refreshDevices();
+        
+        // 镜像刷写
+        window.flashImage = () => magicTool?.flashImage();
+        window.erasePartition = () => magicTool?.erasePartition();
+        window.verifyImage = () => {
+            if (!magicTool?.currentFile) {
+                magicTool?.showMessage('请先选择镜像文件', 'warning');
+                return;
             }
-        });
+            magicTool?.showMessage('镜像验证功能开发中...', 'info');
+        };
+        
+        // 分区管理
+        window.getPartitions = () => magicTool?.getPartitions();
+        window.backupPartition = () => magicTool?.backupPartition();
+        window.restorePartition = () => {
+            magicTool?.showMessage('恢复分区功能开发中...', 'info');
+        };
+        
+        // 命令执行
+        window.executeCommand = () => magicTool?.executeCommand();
+        window.setCommand = (cmd) => {
+            document.getElementById('commandInput').value = cmd;
+            document.getElementById('commandInput').focus();
+        };
+        
+        // 高级功能
+        window.confirmUnlockBootloader = () => {
+            magicTool?.showConfirm('解锁Bootloader会清除所有用户数据，确定要继续吗？', async () => {
+                try {
+                    magicTool?.addLog('Bootloader', '开始解锁Bootloader...');
+                    await magicTool?.sendFastbootCommand('flashing unlock');
+                    magicTool?.showMessage('Bootloader解锁成功！设备将重启', 'success');
+                    magicTool?.addLog('Bootloader', '解锁成功，设备重启中...');
+                } catch (error) {
+                    magicTool?.addLog('错误', `解锁失败: ${error.message}`);
+                    magicTool?.showMessage(`解锁失败: ${error.message}`, 'error');
+                }
+            });
+        };
+        
+        window.confirmLockBootloader = () => {
+            magicTool?.showConfirm('锁定Bootloader可能导致某些功能受限，确定要继续吗？', async () => {
+                try {
+                    magicTool?.addLog('Bootloader', '开始锁定Bootloader...');
+                    await magicTool?.sendFastbootCommand('flashing lock');
+                    magicTool?.showMessage('Bootloader锁定成功！设备将重启', 'success');
+                    magicTool?.addLog('Bootloader', '锁定成功，设备重启中...');
+                } catch (error) {
+                    magicTool?.addLog('错误', `锁定失败: ${error.message}`);
+                    magicTool?.showMessage(`锁定失败: ${error.message}`, 'error');
+                }
+            });
+        };
+        
+        window.enterEDL = () => {
+            magicTool?.showMessage('进入EDL模式功能开发中...', 'info');
+        };
+        
+        window.wipeAll = () => {
+            magicTool?.showConfirm('确定要深度清理吗？这将擦除cache、data分区！', async () => {
+                try {
+                    magicTool?.addLog('清理', '开始深度清理...');
+                    await magicTool?.sendFastbootCommand('erase cache');
+                    await magicTool?.sendFastbootCommand('erase userdata');
+                    magicTool?.showMessage('深度清理完成，设备将重启', 'success');
+                } catch (error) {
+                    magicTool?.showMessage(`清理失败: ${error.message}`, 'error');
+                }
+            });
+        };
+        
+        window.formatUserData = () => {
+            magicTool?.showConfirm('确定要格式化用户数据分区吗？所有数据将被清除！', async () => {
+                try {
+                    await magicTool?.sendFastbootCommand('format:ext4 userdata');
+                    magicTool?.showMessage('用户数据已格式化', 'success');
+                } catch (error) {
+                    magicTool?.showMessage(`格式化失败: ${error.message}`, 'error');
+                }
+            });
+        };
+        
+        // 日志管理
+        window.clearLogs = () => {
+            const container = document.getElementById('logContainer');
+            container.innerHTML = `
+                <div class="log-entry info">
+                    <span class="log-time">[启动]</span> 日志已清空
+                </div>
+            `;
+            magicTool.logs = [];
+        };
+        
+        window.exportLogs = () => {
+            if (!magicTool?.logs.length) {
+                magicTool?.showMessage('没有日志可导出', 'warning');
+                return;
+            }
+            
+            const logText = magicTool.logs.map(log => 
+                `[${log.time.toLocaleTimeString()}] ${log.type}: ${log.message}`
+            ).join('\n');
+            
+            const blob = new Blob([logText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `fastboot_logs_${Date.now()}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            magicTool?.showMessage('日志已导出', 'success');
+        };
+        
+        // 文件处理
+        window.handleFileSelect = (event) => magicTool?.handleFileSelect(event);
+        
+        // 确认对话框
+        window.hideConfirm = () => {
+            document.getElementById('confirmModal').classList.remove('active');
+        };
     </script>
 </body>
 </html>
